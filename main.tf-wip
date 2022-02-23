@@ -1,7 +1,9 @@
 locals {
   count               = var.subnet_count_private + var.subnet_count_public
   name                = "${replace(var.label, "/[^a-zA-Z0-9_\\-\\.]/", "")}-${var.label}"
+# base_security_group = var.base_security_group != null ? var.base_security_group : data.aws_security_group.bassg.id
   base_security_group = var.base_security_group != null ? var.base_security_group : data.aws_security_group.bassg.id
+/*
   ssh_security_group_rule = var.allow_ssh_from != "" ? [{
     name        = "ssh-i"
     type        = "ingress"
@@ -18,9 +20,12 @@ locals {
     cidr_blocks = var.allow_ssh_from
   }] : []
   security_group_rules = concat(local.ssh_security_group_rule, var.security_group_rules)
+*/
+
 }
 
 
+/*
 resource "aws_security_group" "ec2bastion" {
   #  name   = "${var.prefix_name}-bas-sg-group"
   #  vpc_id = data.aws_vpc.vpc.id
@@ -49,10 +54,12 @@ resource "aws_security_group_rule" "addSGrule" {
 
 }
 
+*/
+
 
 module "bastion1" {
-  #  source = "/Users/sivasaivm/Documents/MyData/SivasailamV/Projects/CloudNative/software-everywhere/ec2/ec2-dev-v5/terraform-aws-ec2"
-  source                  = "github.com/cloud-native-toolkit/terraform-aws-ec2"
+  source = "/Users/sivasaivm/Documents/MyData/SivasailamV/Projects/CloudNative/software-everywhere/ec2/ec2-dev-v5/terraform-aws-ec2"
+#  source                  = "github.com/cloud-native-toolkit/terraform-aws-ec2"
   subnet_count_public     = var.subnet_count_public
   subnet_ids_pub          = var.subnet_ids_pub
   ami_id                  = var.ami_id
