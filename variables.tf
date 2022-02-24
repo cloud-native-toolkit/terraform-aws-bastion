@@ -74,7 +74,7 @@ variable "root_volume_type" {
 variable "root_block_device_encrypted" {
   type        = bool
   default     = true
-  description = "Whether to encrypt the root block device"
+  description = "Whether   to encrypt the root block device"
 }
 
 variable "root_volume_size" {
