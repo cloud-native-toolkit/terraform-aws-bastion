@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         testcase:
-          - bastion_latest
+          - aws_ec2instance
       fail-fast: false
 
     env:
