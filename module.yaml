@@ -1,55 +1,75 @@
-name: ""
+name: "aws-ec2-insatnce"
 type: terraform
-description: ""
+description: Module to provision ec2 on aws
 tags:
-    - tools
-    - devops
+    - infrastructure
+    - ec2
+    - virtual instance
+    - vpc
 versions:
-- platforms:
-    - kubernetes
-    - ocp3
-    - ocp4
-#  providers:
-#    - name: ibm
-#      source: "ibm-cloud/ibm"
-  dependencies: []
-#    - id: cluster
-#      refs:
-#        - source: github.com/ibm-garage-cloud/terraform-ibm-container-platform
-#          version: ">= 1.7.0"
-#        - source: github.com/ibm-garage-cloud/terraform-k8s-ocp-cluster
-#          version: ">= 2.0.0"
-#    - id: namespace
-#      refs:
-#        - source: github.com/ibm-garage-cloud/terraform-k8s-namespace
-#          version: ">= 2.1.0"
-#    - id: dashboard
-#      refs:
-#        - source: github.com/ibm-garage-cloud/terraform-k8s-dashboard
-#          version: ">= 1.6.0"
-  variables: []
-#    - name: cluster_type
-#      moduleRef:
-#        id: cluster
-#        output: type_code
-#    - name: cluster_ingress_hostname
-#      moduleRef:
-#        id: cluster
-#        output: ingress_hostname
-#    - name: cluster_config_file
-#      moduleRef:
-#        id: cluster
-#        output: config_file_path
-#    - name: tls_secret_name
-#      moduleRef:
-#        id: cluster
-#        output: tls_secret_name
-#    - name: releases_namespace
-#      moduleRef:
-#        id: namespace
-#        output: name
-#        discriminator: tools
-#    - name: icon_url
-#      moduleRef:
-#        id: dashboard
-#        output: base_icon_url
+- platforms: []
+  providers:
+    - name: aws
+      source: "hashicorp/aws"
+  dependencies:
+    - id: ec2-instance
+      refs:
+        - source: github.com/cloud-native-toolkit/terraform-aws-ec2
+          version: ">= 1.0.0"
+    - id: vpcssh
+      refs:
+        - source: github.com/cloud-native-toolkit/terraform-aws-ssh-key
+          version: ">= 1.0.0"
+    - id: vpc
+      refs:
+        - source: github.com/cloud-native-toolkit/terraform-aws-vpc
+          version: ">= 1.0.0"
+    - id: subnets
+      refs:
+        - source: github.com/cloud-native-toolkit/terraform-aws-vpc-subnets
+          version: ">= 1.0.0"
+    - id: kms_key
+      refs:
+        - source: github.com/cloud-native-toolkit/terraform-ibm-kms-key
+          version: ">= 0.0.1"
+      optional: true
+  variables:
+    - name: vpc_id
+      moduleRef:
+        id: vpc
+        output: vpcID
+    - name: subnet_ids_pri
+      moduleRef:
+        id: subnets
+        output: subnet_ids_pri_network
+    - name: subnet_ids_pub
+      moduleRef:
+        id: subnets
+        output: subnet_ids_pub_network
+    - name: subnet_count_private
+      moduleRef:
+        id: subnets
+        output: count
+    - name: subnet_count_public
+      moduleRef:
+        id: subnets
+        output: count
+    - name: ssh_key
+      moduleRef:
+        id: vpcssh
+        output: name
+    - name: region
+      scope: global
+    - name: tags
+      scope: module
+    - name: kms_key_crn
+      moduleRef:
+        id: kms_key
+        output: crn
+      optional: true
+    - name: base_security_group
+      scope: module
+    - name: root_volume_size
+      scope: module
+    - name: root_volume_type
+      scope: module
