@@ -1,6 +1,6 @@
 output "subnet_ids_pub" {
-  depends_on = [module.subnets]
-  value      = module.subnets.public_subnet_ids
+  depends_on = [module.pub_subnet]
+  value = module.pub_subnet.subnet_ids
 }
 
 output "instance_public_ip" {
