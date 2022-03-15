@@ -19,6 +19,11 @@ variable "pubnet_ids" {
   default = [""]
 }
 
+variable "resource_group_name" {
+  type    = string
+  default = "default"
+}
+
 
 
 ###module based variables##
