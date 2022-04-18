@@ -18,10 +18,6 @@ versions:
       refs:
         - source: github.com/cloud-native-toolkit/terraform-aws-ssh-key
           version: ">= 1.0.0"
-    - id: aws-kms
-      refs:
-        - source: github.com/cloud-native-toolkit/terraform-ibm-kms-key
-          version: ">= 0.0.1"
     - id: aws-vpc
       refs:
         - source: github.com/cloud-native-toolkit/terraform-aws-vpc
@@ -52,8 +48,4 @@ versions:
       moduleRef:
         id: aws-ssh-key
         output: swesshkeyname
-    - name: kms_key_id
-      moduleRef:
-        id: aws-kms
-        output: key_arn
       optional: true
