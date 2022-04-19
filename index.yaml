@@ -1,10 +1,769 @@
 id: github.com/cloud-native-toolkit/terraform-aws-bastion
-name: "aws-ec2-bastion"
+name: aws-ec2-bastion
 type: terraform
 description: Module to provision ec2 on aws
 tags:
   - infrastructure
-  - ec2
-  - virtual instance
-  - vpc
-versions: [{platforms: [], providers: [{name: aws, source: "hashicorp/aws"}], dependencies: [{id: ec2-instance, refs: [{source: github.com/cloud-native-toolkit/terraform-aws-ec2, version: ">= 1.0.0"}]}, {id: vpcssh, refs: [{source: github.com/cloud-native-toolkit/terraform-aws-ssh-key, version: ">= 1.0.0"}]}, {id: vpc, refs: [{source: github.com/cloud-native-toolkit/terraform-aws-vpc, version: ">= 1.0.0"}]}, {id: subnets, refs: [{source: github.com/cloud-native-toolkit/terraform-aws-vpc-subnets, version: ">= 1.0.0"}]}, {id: kms_key, refs: [{source: github.com/cloud-native-toolkit/terraform-ibm-kms-key, version: ">= 0.0.1"}], optional: true}], variables: [{name: vpc_id, moduleRef: {id: vpc, output: vpcID}, type: string, default: "", optional: true}, {name: subnet_ids_pri, moduleRef: {id: subnets, output: subnet_ids_pri_network}, type: list(any), default: [], optional: true}, {name: subnet_ids_pub, moduleRef: {id: subnets, output: subnet_ids_pub_network}, type: list(any), default: [], optional: true}, {name: subnet_count_private, moduleRef: {id: subnets, output: count}, type: number, default: 0, optional: true}, {name: subnet_count_public, moduleRef: {id: subnets, output: count}, type: number, default: 0, optional: true}, {name: ssh_key, moduleRef: {id: vpcssh, output: name}, type: string, description: AWS EC2 Instance Public Key, default: "", optional: true}, {name: region, scope: global}, {name: tags, scope: module, type: map(string), description: '(Optional) A map of tags to assign to the resource. If configured with a provider default_tags configuration block present, tags with matching keys will overwrite those defined at the provider-level.', default: '{ project = swe }', optional: true}, {name: kms_key_crn, moduleRef: {id: kms_key, output: crn}, optional: true}, {name: base_security_group, scope: module, type: string, description: ID of the base security group(SG) to use for the ec2 instance. If not provided a new SG  will be created., default: "null", optional: true}, {name: root_volume_size, scope: module, type: number, description: Size of the root volume in gigabytes, default: 10, optional: true}, {name: root_volume_type, scope: module, type: string, description: 'Type of root volume. Can be standard, gp2 or io1', default: gp2, optional: true}, {name: subnet_id, type: list(any), default: [], optional: true}, {name: public_subnet_ids, type: list(any), default: [], optional: true}, {name: pubnet_ids, type: list(any), default: [], optional: true}, {name: ami_id, type: string, description: AMI ID for bastion host, default: "", optional: true}, {name: instance_type, type: string, description: EC2 Instance Type 2 default, default: t3.large, optional: true}, {name: publickey, type: string, description: EC2   Instance Public Key, default: "", optional: true}, {name: publicIP, type: bool, description: Whether to attach a public IP to EC2 instance, default: false, optional: true}, {name: root_block_device_encrypted, type: bool, description: Whether   to encrypt the root block device, default: true, optional: true}, {name: prefix_name, type: string, description: Prefix to be added to the names of resources which are being provisioned, default: swe, optional: true}, {name: pri_instance_monitoring, type: bool, description: Enable  EC2 private instance advance monitoring, default: false, optional: true}, {name: label, type: string, default: prd, optional: true}, {name: allow_ssh_from, type: list(any), description: 'An IP address, a CIDR block, or a single security group identifier to allow incoming SSH connection to the virtual server', default: '[0.0.0.0/0]', optional: true}, {name: security_group_rules, type: "string,\n    protocol    = string,\n    from_port   = number,\n    to_port     = number,\n    cidr_blocks = optional(string),\n    ip_version  = optional(string),\n  }))", description: List of security group rules to set on the bastion security group in addition to the SSH rules, default: [], optional: true}, {name: vpc_subnet_count, type: number, default: 0, optional: true}, {name: vpc_subnets, type: string, default: "", optional: true}, {name: init_script, type: string, description: Script to run during the instance initialization. Defaults to an Ubuntu specific script when set to empty, default: "", optional: true}], version: v1.0.2, outputs: [{name: instance_public_ip, description: The public IP address of the instance.}]}, {platforms: [], providers: [{name: aws, source: "hashicorp/aws"}], dependencies: [{id: ec2-instance, refs: [{source: github.com/cloud-native-toolkit/terraform-aws-ec2, version: ">= 1.0.0"}]}, {id: vpcssh, refs: [{source: github.com/cloud-native-toolkit/terraform-aws-ssh-key, version: ">= 1.0.0"}]}, {id: vpc, refs: [{source: github.com/cloud-native-toolkit/terraform-aws-vpc, version: ">= 1.0.0"}]}, {id: subnets, refs: [{source: github.com/cloud-native-toolkit/terraform-aws-vpc-subnets, version: ">= 1.0.0"}]}, {id: kms_key, refs: [{source: github.com/cloud-native-toolkit/terraform-ibm-kms-key, version: ">= 0.0.1"}], optional: true}], variables: [{name: vpc_id, moduleRef: {id: vpc, output: vpcID}, type: string, default: "", optional: true}, {name: subnet_ids_pri, moduleRef: {id: subnets, output: subnet_ids_pri_network}, type: list(any), default: [], optional: true}, {name: subnet_ids_pub, moduleRef: {id: subnets, output: subnet_ids_pub_network}, type: list(any), default: [], optional: true}, {name: subnet_count_private, moduleRef: {id: subnets, output: count}, type: number, default: 0, optional: true}, {name: subnet_count_public, moduleRef: {id: subnets, output: count}, type: number, default: 0, optional: true}, {name: ssh_key, moduleRef: {id: vpcssh, output: name}, type: string, description: AWS EC2 Instance Public Key, default: "", optional: true}, {name: region, scope: global}, {name: tags, scope: module, type: map(string), description: '(Optional) A map of tags to assign to the resource. If configured with a provider default_tags configuration block present, tags with matching keys will overwrite those defined at the provider-level.', default: '{ project = swe }', optional: true}, {name: kms_key_crn, moduleRef: {id: kms_key, output: crn}, optional: true}, {name: base_security_group, scope: module, type: string, description: ID of the base security group(SG) to use for the ec2 instance. If not provided a new SG  will be created., default: "null", optional: true}, {name: root_volume_size, scope: module, type: number, description: Size of the root volume in gigabytes, default: 10, optional: true}, {name: root_volume_type, scope: module, type: string, description: 'Type of root volume. Can be standard, gp2 or io1', default: gp2, optional: true}, {name: subnet_id, type: list(any), default: [], optional: true}, {name: public_subnet_ids, type: list(any), default: [], optional: true}, {name: pubnet_ids, type: list(any), default: [], optional: true}, {name: ami_id, type: string, description: AMI ID for bastion host, default: "", optional: true}, {name: instance_type, type: string, description: EC2 Instance Type 2 default, default: t3.large, optional: true}, {name: publickey, type: string, description: EC2   Instance Public Key, default: "", optional: true}, {name: publicIP, type: bool, description: Whether to attach a public IP to EC2 instance, default: false, optional: true}, {name: root_block_device_encrypted, type: bool, description: Whether   to encrypt the root block device, default: true, optional: true}, {name: prefix_name, type: string, description: Prefix to be added to the names of resources which are being provisioned, default: swe, optional: true}, {name: pri_instance_monitoring, type: bool, description: Enable  EC2 private instance advance monitoring, default: false, optional: true}, {name: label, type: string, default: prd, optional: true}, {name: allow_ssh_from, type: list(any), description: 'An IP address, a CIDR block, or a single security group identifier to allow incoming SSH connection to the virtual server', default: '[0.0.0.0/0]', optional: true}, {name: security_group_rules, type: "string,\n    protocol    = string,\n    from_port   = number,\n    to_port     = number,\n    cidr_blocks = optional(string),\n    ip_version  = optional(string),\n  }))", description: List of security group rules to set on the bastion security group in addition to the SSH rules, default: [], optional: true}, {name: vpc_subnet_count, type: number, default: 0, optional: true}, {name: vpc_subnets, type: string, default: "", optional: true}, {name: init_script, type: string, description: Script to run during the instance initialization. Defaults to an Ubuntu specific script when set to empty, default: "", optional: true}], version: v1.0.1, outputs: [{name: instance_public_ip, description: The public IP address of the instance.}]}, {platforms: [], providers: [{name: aws, source: "hashicorp/aws"}], dependencies: [{id: ec2-instance, refs: [{source: github.com/cloud-native-toolkit/terraform-aws-ec2, version: ">= 1.0.0"}]}, {id: vpcssh, refs: [{source: github.com/cloud-native-toolkit/terraform-aws-ssh-key, version: ">= 1.0.0"}]}, {id: vpc, refs: [{source: github.com/cloud-native-toolkit/terraform-aws-vpc, version: ">= 1.0.0"}]}, {id: subnets, refs: [{source: github.com/cloud-native-toolkit/terraform-aws-vpc-subnets, version: ">= 1.0.0"}]}, {id: kms_key, refs: [{source: github.com/cloud-native-toolkit/terraform-ibm-kms-key, version: ">= 0.0.1"}], optional: true}], variables: [{name: vpc_id, moduleRef: {id: vpc, output: vpcID}, type: string, default: "", optional: true}, {name: subnet_ids_pri, moduleRef: {id: subnets, output: subnet_ids_pri_network}, type: list(any), default: [], optional: true}, {name: subnet_ids_pub, moduleRef: {id: subnets, output: subnet_ids_pub_network}, type: list(any), default: [], optional: true}, {name: subnet_count_private, moduleRef: {id: subnets, output: count}, type: number, default: 0, optional: true}, {name: subnet_count_public, moduleRef: {id: subnets, output: count}, type: number, default: 0, optional: true}, {name: ssh_key, moduleRef: {id: vpcssh, output: name}, type: string, description: AWS EC2 Instance Public Key, default: "", optional: true}, {name: region, scope: global}, {name: tags, scope: module, type: map(string), description: '(Optional) A map of tags to assign to the resource. If configured with a provider default_tags configuration block present, tags with matching keys will overwrite those defined at the provider-level.', default: '{ project = swe }', optional: true}, {name: kms_key_crn, moduleRef: {id: kms_key, output: crn}, optional: true}, {name: base_security_group, scope: module, type: string, description: ID of the base security group(SG) to use for the ec2 instance. If not provided a new SG  will be created., default: "null", optional: true}, {name: root_volume_size, scope: module, type: number, description: Size of the root volume in gigabytes, default: 10, optional: true}, {name: root_volume_type, scope: module, type: string, description: 'Type of root volume. Can be standard, gp2 or io1', default: gp2, optional: true}, {name: subnet_id, type: list(any), default: [], optional: true}, {name: public_subnet_ids, type: list(any), default: [], optional: true}, {name: pubnet_ids, type: list(any), default: [], optional: true}, {name: ami_id, type: string, description: AMI ID for bastion host, default: "", optional: true}, {name: instance_type, type: string, description: EC2 Instance Type 2 default, default: t3.large, optional: true}, {name: publickey, type: string, description: EC2   Instance Public Key, default: "", optional: true}, {name: publicIP, type: bool, description: Whether to attach a public IP to EC2 instance, default: false, optional: true}, {name: root_block_device_encrypted, type: bool, description: Whether   to encrypt the root block device, default: true, optional: true}, {name: prefix_name, type: string, description: Prefix to be added to the names of resources which are being provisioned, default: swe, optional: true}, {name: pri_instance_monitoring, type: bool, description: Enable  EC2 private instance advance monitoring, default: false, optional: true}, {name: label, type: string, default: prd, optional: true}, {name: allow_ssh_from, type: list(any), description: 'An IP address, a CIDR block, or a single security group identifier to allow incoming SSH connection to the virtual server', default: '[0.0.0.0/0]', optional: true}, {name: security_group_rules, type: "string,\n    protocol    = string,\n    from_port   = number,\n    to_port     = number,\n    cidr_blocks = optional(string),\n    ip_version  = optional(string),\n  }))", description: List of security group rules to set on the bastion security group in addition to the SSH rules, default: [], optional: true}, {name: vpc_subnet_count, type: number, default: 0, optional: true}, {name: vpc_subnets, type: string, default: "", optional: true}, {name: init_script, type: string, description: Script to run during the instance initialization. Defaults to an Ubuntu specific script when set to empty, default: "", optional: true}], version: v1.0.0, outputs: [{name: instance_public_ip, description: The public IP address of the instance.}]}]
+  - networking
+versions:
+  - platforms: []
+    providers:
+      - name: aws
+        source: hashicorp/aws
+    dependencies:
+      - id: ec2-instance
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-ec2
+            version: '>= 1.0.0'
+      - id: aws-ssh-key
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-ssh-key
+            version: '>= 1.0.0'
+      - id: aws-vpc
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-vpc
+            version: '>= 1.0.0'
+      - id: public-subnets
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-vpc-subnets
+            version: '>= 1.0.0'
+      - id: private-subnets
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-vpc-subnets
+            version: '>= 1.0.0'
+        optional: true
+    variables:
+      - name: subnet_id
+        type: list(any)
+        default: '[""]'
+      - name: subnet_ids_pub
+        type: list(any)
+        default: '[]'
+        moduleRef:
+          id: public-subnets
+          output: subnet_ids
+      - name: public_subnet_ids
+        type: list(any)
+        default: '[""]'
+      - name: pubnet_ids
+        type: list(any)
+        default: '[""]'
+      - name: subnet_ids_pri
+        type: list(any)
+        default: '[]'
+      - name: subnet_count_private
+        type: number
+        default: '0'
+      - name: subnet_count_public
+        type: number
+        default: '0'
+        moduleRef:
+          id: public-subnets
+          output: count
+      - name: ami_id
+        type: string
+        description: AMI ID for bastion host
+        default: ''
+      - name: instance_type
+        type: string
+        description: EC2 Instance Type 2 default
+        default: t3.large
+      - name: publickey
+        type: string
+        default: ''
+        description: EC2   Instance Public Key
+      - name: ssh_key
+        type: string
+        default: ''
+        description: AWS EC2 Instance Public Key
+        moduleRef:
+          id: aws-ssh-key
+          output: swesshkeyname
+        optional: true
+      - name: publicIP
+        type: bool
+        default: false
+        description: Whether to attach a public IP to EC2 instance
+      - name: root_volume_type
+        type: string
+        description: Type of root volume. Can be standard, gp2 or io1
+        default: gp2
+      - name: root_block_device_encrypted
+        type: bool
+        default: true
+        description: Whether   to encrypt the root block device
+      - name: root_volume_size
+        type: number
+        description: Size of the root volume in gigabytes
+        default: '10'
+      - name: tags
+        type: map(string)
+        default: |-
+          {
+              project = "swe"
+            }
+        description: >-
+          (Optional) A map of tags to assign to the resource. If configured with
+          a provider default_tags configuration block present, tags with
+          matching keys will overwrite those defined at the provider-level.
+      - name: prefix_name
+        type: string
+        description: >-
+          Prefix to be added to the names of resources which are being
+          provisioned
+        default: swe
+      - name: pri_instance_monitoring
+        type: bool
+        default: false
+        description: Enable  EC2 private instance advance monitoring
+      - name: label
+        default: prd
+        type: string
+      - name: allow_ssh_from
+        type: list(any)
+        description: >-
+          An IP address, a CIDR block, or a single security group identifier to
+          allow incoming SSH connection to the virtual server
+        default: '["0.0.0.0/0"]'
+      - name: base_security_group
+        type: string
+        description: >-
+          ID of the base security group(SG) to use for the ec2 instance. If not
+          provided a new SG  will be created.
+        default: 'null'
+      - name: security_group_rules
+        type: |-
+          list(object({
+              name        = string,
+              type        = string,
+              protocol    = string,
+              from_port   = number,
+              to_port     = number,
+              cidr_blocks = optional(string),
+              ip_version  = optional(string),
+            }))
+        description: >-
+          List of security group rules to set on the bastion security group in
+          addition to the SSH rules
+        default: '[]'
+      - name: vpc_id
+        type: string
+        default: ''
+        moduleRef:
+          id: aws-vpc
+          output: vpc_id
+      - name: vpc_subnet_count
+        type: number
+        default: '0'
+      - name: vpc_subnets
+        type: string
+        default: ''
+      - name: init_script
+        type: string
+        default: ''
+        description: >-
+          Script to run during the instance initialization. Defaults to an
+          Ubuntu specific script when set to empty
+    version: v1.1.0
+    outputs:
+      - name: instance_public_ip
+        description: The public IP address of the instance.
+      - name: instance_public_ip
+        description: The public IP address of the instance.
+  - platforms: []
+    providers:
+      - name: aws
+        source: hashicorp/aws
+    dependencies:
+      - id: ec2-instance
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-ec2
+            version: '>= 1.0.0'
+      - id: vpcssh
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-ssh-key
+            version: '>= 1.0.0'
+      - id: vpc
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-vpc
+            version: '>= 1.0.0'
+      - id: subnets
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-vpc-subnets
+            version: '>= 1.0.0'
+      - id: kms_key
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-ibm-kms-key
+            version: '>= 0.0.1'
+        optional: true
+    variables:
+      - name: vpc_id
+        moduleRef:
+          id: vpc
+          output: vpcID
+        type: string
+        default: ''
+        optional: true
+      - name: subnet_ids_pri
+        moduleRef:
+          id: subnets
+          output: subnet_ids_pri_network
+        type: list(any)
+        default: []
+        optional: true
+      - name: subnet_ids_pub
+        moduleRef:
+          id: subnets
+          output: subnet_ids_pub_network
+        type: list(any)
+        default: []
+        optional: true
+      - name: subnet_count_private
+        moduleRef:
+          id: subnets
+          output: count
+        type: number
+        default: 0
+        optional: true
+      - name: subnet_count_public
+        moduleRef:
+          id: subnets
+          output: count
+        type: number
+        default: 0
+        optional: true
+      - name: ssh_key
+        moduleRef:
+          id: vpcssh
+          output: name
+        type: string
+        description: AWS EC2 Instance Public Key
+        default: ''
+        optional: true
+      - name: region
+        scope: global
+      - name: tags
+        scope: module
+        type: map(string)
+        description: >-
+          (Optional) A map of tags to assign to the resource. If configured with
+          a provider default_tags configuration block present, tags with
+          matching keys will overwrite those defined at the provider-level.
+        default: '{ project = swe }'
+        optional: true
+      - name: kms_key_crn
+        moduleRef:
+          id: kms_key
+          output: crn
+        optional: true
+      - name: base_security_group
+        scope: module
+        type: string
+        description: >-
+          ID of the base security group(SG) to use for the ec2 instance. If not
+          provided a new SG  will be created.
+        default: 'null'
+        optional: true
+      - name: root_volume_size
+        scope: module
+        type: number
+        description: Size of the root volume in gigabytes
+        default: 10
+        optional: true
+      - name: root_volume_type
+        scope: module
+        type: string
+        description: Type of root volume. Can be standard, gp2 or io1
+        default: gp2
+        optional: true
+      - name: subnet_id
+        type: list(any)
+        default: []
+        optional: true
+      - name: public_subnet_ids
+        type: list(any)
+        default: []
+        optional: true
+      - name: pubnet_ids
+        type: list(any)
+        default: []
+        optional: true
+      - name: ami_id
+        type: string
+        description: AMI ID for bastion host
+        default: ''
+        optional: true
+      - name: instance_type
+        type: string
+        description: EC2 Instance Type 2 default
+        default: t3.large
+        optional: true
+      - name: publickey
+        type: string
+        description: EC2   Instance Public Key
+        default: ''
+        optional: true
+      - name: publicIP
+        type: bool
+        description: Whether to attach a public IP to EC2 instance
+        default: false
+        optional: true
+      - name: root_block_device_encrypted
+        type: bool
+        description: Whether   to encrypt the root block device
+        default: true
+        optional: true
+      - name: prefix_name
+        type: string
+        description: >-
+          Prefix to be added to the names of resources which are being
+          provisioned
+        default: swe
+        optional: true
+      - name: pri_instance_monitoring
+        type: bool
+        description: Enable  EC2 private instance advance monitoring
+        default: false
+        optional: true
+      - name: label
+        type: string
+        default: prd
+        optional: true
+      - name: allow_ssh_from
+        type: list(any)
+        description: >-
+          An IP address, a CIDR block, or a single security group identifier to
+          allow incoming SSH connection to the virtual server
+        default: '[0.0.0.0/0]'
+        optional: true
+      - name: security_group_rules
+        type: |-
+          string,
+              protocol    = string,
+              from_port   = number,
+              to_port     = number,
+              cidr_blocks = optional(string),
+              ip_version  = optional(string),
+            }))
+        description: >-
+          List of security group rules to set on the bastion security group in
+          addition to the SSH rules
+        default: []
+        optional: true
+      - name: vpc_subnet_count
+        type: number
+        default: 0
+        optional: true
+      - name: vpc_subnets
+        type: string
+        default: ''
+        optional: true
+      - name: init_script
+        type: string
+        description: >-
+          Script to run during the instance initialization. Defaults to an
+          Ubuntu specific script when set to empty
+        default: ''
+        optional: true
+    version: v1.0.2
+    outputs:
+      - name: instance_public_ip
+        description: The public IP address of the instance.
+  - platforms: []
+    providers:
+      - name: aws
+        source: hashicorp/aws
+    dependencies:
+      - id: ec2-instance
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-ec2
+            version: '>= 1.0.0'
+      - id: vpcssh
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-ssh-key
+            version: '>= 1.0.0'
+      - id: vpc
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-vpc
+            version: '>= 1.0.0'
+      - id: subnets
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-vpc-subnets
+            version: '>= 1.0.0'
+      - id: kms_key
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-ibm-kms-key
+            version: '>= 0.0.1'
+        optional: true
+    variables:
+      - name: vpc_id
+        moduleRef:
+          id: vpc
+          output: vpcID
+        type: string
+        default: ''
+        optional: true
+      - name: subnet_ids_pri
+        moduleRef:
+          id: subnets
+          output: subnet_ids_pri_network
+        type: list(any)
+        default: []
+        optional: true
+      - name: subnet_ids_pub
+        moduleRef:
+          id: subnets
+          output: subnet_ids_pub_network
+        type: list(any)
+        default: []
+        optional: true
+      - name: subnet_count_private
+        moduleRef:
+          id: subnets
+          output: count
+        type: number
+        default: 0
+        optional: true
+      - name: subnet_count_public
+        moduleRef:
+          id: subnets
+          output: count
+        type: number
+        default: 0
+        optional: true
+      - name: ssh_key
+        moduleRef:
+          id: vpcssh
+          output: name
+        type: string
+        description: AWS EC2 Instance Public Key
+        default: ''
+        optional: true
+      - name: region
+        scope: global
+      - name: tags
+        scope: module
+        type: map(string)
+        description: >-
+          (Optional) A map of tags to assign to the resource. If configured with
+          a provider default_tags configuration block present, tags with
+          matching keys will overwrite those defined at the provider-level.
+        default: '{ project = swe }'
+        optional: true
+      - name: kms_key_crn
+        moduleRef:
+          id: kms_key
+          output: crn
+        optional: true
+      - name: base_security_group
+        scope: module
+        type: string
+        description: >-
+          ID of the base security group(SG) to use for the ec2 instance. If not
+          provided a new SG  will be created.
+        default: 'null'
+        optional: true
+      - name: root_volume_size
+        scope: module
+        type: number
+        description: Size of the root volume in gigabytes
+        default: 10
+        optional: true
+      - name: root_volume_type
+        scope: module
+        type: string
+        description: Type of root volume. Can be standard, gp2 or io1
+        default: gp2
+        optional: true
+      - name: subnet_id
+        type: list(any)
+        default: []
+        optional: true
+      - name: public_subnet_ids
+        type: list(any)
+        default: []
+        optional: true
+      - name: pubnet_ids
+        type: list(any)
+        default: []
+        optional: true
+      - name: ami_id
+        type: string
+        description: AMI ID for bastion host
+        default: ''
+        optional: true
+      - name: instance_type
+        type: string
+        description: EC2 Instance Type 2 default
+        default: t3.large
+        optional: true
+      - name: publickey
+        type: string
+        description: EC2   Instance Public Key
+        default: ''
+        optional: true
+      - name: publicIP
+        type: bool
+        description: Whether to attach a public IP to EC2 instance
+        default: false
+        optional: true
+      - name: root_block_device_encrypted
+        type: bool
+        description: Whether   to encrypt the root block device
+        default: true
+        optional: true
+      - name: prefix_name
+        type: string
+        description: >-
+          Prefix to be added to the names of resources which are being
+          provisioned
+        default: swe
+        optional: true
+      - name: pri_instance_monitoring
+        type: bool
+        description: Enable  EC2 private instance advance monitoring
+        default: false
+        optional: true
+      - name: label
+        type: string
+        default: prd
+        optional: true
+      - name: allow_ssh_from
+        type: list(any)
+        description: >-
+          An IP address, a CIDR block, or a single security group identifier to
+          allow incoming SSH connection to the virtual server
+        default: '[0.0.0.0/0]'
+        optional: true
+      - name: security_group_rules
+        type: |-
+          string,
+              protocol    = string,
+              from_port   = number,
+              to_port     = number,
+              cidr_blocks = optional(string),
+              ip_version  = optional(string),
+            }))
+        description: >-
+          List of security group rules to set on the bastion security group in
+          addition to the SSH rules
+        default: []
+        optional: true
+      - name: vpc_subnet_count
+        type: number
+        default: 0
+        optional: true
+      - name: vpc_subnets
+        type: string
+        default: ''
+        optional: true
+      - name: init_script
+        type: string
+        description: >-
+          Script to run during the instance initialization. Defaults to an
+          Ubuntu specific script when set to empty
+        default: ''
+        optional: true
+    version: v1.0.1
+    outputs:
+      - name: instance_public_ip
+        description: The public IP address of the instance.
+  - platforms: []
+    providers:
+      - name: aws
+        source: hashicorp/aws
+    dependencies:
+      - id: ec2-instance
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-ec2
+            version: '>= 1.0.0'
+      - id: vpcssh
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-ssh-key
+            version: '>= 1.0.0'
+      - id: vpc
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-vpc
+            version: '>= 1.0.0'
+      - id: subnets
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-aws-vpc-subnets
+            version: '>= 1.0.0'
+      - id: kms_key
+        refs:
+          - source: github.com/cloud-native-toolkit/terraform-ibm-kms-key
+            version: '>= 0.0.1'
+        optional: true
+    variables:
+      - name: vpc_id
+        moduleRef:
+          id: vpc
+          output: vpcID
+        type: string
+        default: ''
+        optional: true
+      - name: subnet_ids_pri
+        moduleRef:
+          id: subnets
+          output: subnet_ids_pri_network
+        type: list(any)
+        default: []
+        optional: true
+      - name: subnet_ids_pub
+        moduleRef:
+          id: subnets
+          output: subnet_ids_pub_network
+        type: list(any)
+        default: []
+        optional: true
+      - name: subnet_count_private
+        moduleRef:
+          id: subnets
+          output: count
+        type: number
+        default: 0
+        optional: true
+      - name: subnet_count_public
+        moduleRef:
+          id: subnets
+          output: count
+        type: number
+        default: 0
+        optional: true
+      - name: ssh_key
+        moduleRef:
+          id: vpcssh
+          output: name
+        type: string
+        description: AWS EC2 Instance Public Key
+        default: ''
+        optional: true
+      - name: region
+        scope: global
+      - name: tags
+        scope: module
+        type: map(string)
+        description: >-
+          (Optional) A map of tags to assign to the resource. If configured with
+          a provider default_tags configuration block present, tags with
+          matching keys will overwrite those defined at the provider-level.
+        default: '{ project = swe }'
+        optional: true
+      - name: kms_key_crn
+        moduleRef:
+          id: kms_key
+          output: crn
+        optional: true
+      - name: base_security_group
+        scope: module
+        type: string
+        description: >-
+          ID of the base security group(SG) to use for the ec2 instance. If not
+          provided a new SG  will be created.
+        default: 'null'
+        optional: true
+      - name: root_volume_size
+        scope: module
+        type: number
+        description: Size of the root volume in gigabytes
+        default: 10
+        optional: true
+      - name: root_volume_type
+        scope: module
+        type: string
+        description: Type of root volume. Can be standard, gp2 or io1
+        default: gp2
+        optional: true
+      - name: subnet_id
+        type: list(any)
+        default: []
+        optional: true
+      - name: public_subnet_ids
+        type: list(any)
+        default: []
+        optional: true
+      - name: pubnet_ids
+        type: list(any)
+        default: []
+        optional: true
+      - name: ami_id
+        type: string
+        description: AMI ID for bastion host
+        default: ''
+        optional: true
+      - name: instance_type
+        type: string
+        description: EC2 Instance Type 2 default
+        default: t3.large
+        optional: true
+      - name: publickey
+        type: string
+        description: EC2   Instance Public Key
+        default: ''
+        optional: true
+      - name: publicIP
+        type: bool
+        description: Whether to attach a public IP to EC2 instance
+        default: false
+        optional: true
+      - name: root_block_device_encrypted
+        type: bool
+        description: Whether   to encrypt the root block device
+        default: true
+        optional: true
+      - name: prefix_name
+        type: string
+        description: >-
+          Prefix to be added to the names of resources which are being
+          provisioned
+        default: swe
+        optional: true
+      - name: pri_instance_monitoring
+        type: bool
+        description: Enable  EC2 private instance advance monitoring
+        default: false
+        optional: true
+      - name: label
+        type: string
+        default: prd
+        optional: true
+      - name: allow_ssh_from
+        type: list(any)
+        description: >-
+          An IP address, a CIDR block, or a single security group identifier to
+          allow incoming SSH connection to the virtual server
+        default: '[0.0.0.0/0]'
+        optional: true
+      - name: security_group_rules
+        type: |-
+          string,
+              protocol    = string,
+              from_port   = number,
+              to_port     = number,
+              cidr_blocks = optional(string),
+              ip_version  = optional(string),
+            }))
+        description: >-
+          List of security group rules to set on the bastion security group in
+          addition to the SSH rules
+        default: []
+        optional: true
+      - name: vpc_subnet_count
+        type: number
+        default: 0
+        optional: true
+      - name: vpc_subnets
+        type: string
+        default: ''
+        optional: true
+      - name: init_script
+        type: string
+        description: >-
+          Script to run during the instance initialization. Defaults to an
+          Ubuntu specific script when set to empty
+        default: ''
+        optional: true
+    version: v1.0.0
+    outputs:
+      - name: instance_public_ip
+        description: The public IP address of the instance.
