@@ -1,4 +1,4 @@
-module "pub_subnet" {
+module "subnet" {
   source      = "github.com/cloud-native-toolkit/terraform-aws-vpc-subnets"
   depends_on  = [module.vpc]
   provision   = var.provision

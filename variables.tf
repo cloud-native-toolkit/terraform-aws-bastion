@@ -140,7 +140,7 @@ variable "security_group_rules" {
 
 variable "vpc_id" {
   type    = string
-  default = ""
+#  default = ""
 }
 
 variable "vpc_subnet_count" {
