@@ -52,9 +52,11 @@ resource "aws_security_group_rule" "addSGrule" {
 
 module "bastion1" {
   #  source = "/Users/sivasaivm/Documents/MyData/SivasailamV/Projects/CloudNative/software-everywhere/ec2/ec2-dev-v5/terraform-aws-ec2"
-  source                  = "github.com/cloud-native-toolkit/terraform-aws-ec2"
-  subnet_count_public     = var.subnet_count_public
-  subnet_ids_pub          = var.subnet_ids_pub
+  source = "github.com/cloud-native-toolkit/terraform-aws-ec2"
+  #  count  = length(var.subnet_ids_pub) #Single SN approach
+  # count         = var.subnet_count_public
+  #  subnet_ids_pub          = var.subnet_ids_pub #Single SN approach
+  subnets_ids             = var.subnet_ids_pub
   ami_id                  = var.ami_id
   instance_type           = var.instance_type
   pri_instance_monitoring = var.pri_instance_monitoring
