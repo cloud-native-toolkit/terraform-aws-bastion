@@ -6,7 +6,6 @@ module "vpcssh" {
   public_key_file  = var.public_key_file
   public_key       = var.public_key
   rsa_bits         = var.rsa_bits
-  prefix_name      = var.prefix_name
   name             = var.name
   label            = var.label
   name_prefix      = var.name_prefix

@@ -290,12 +290,6 @@ variable "vpc_subnets" {
 */
 ###var Used by SSH,VPC, module  ###start
 
-variable "prefix_name" {
-  type        = string
-  description = "Prefix to be added to the names of resources which are being provisioned"
-  default     = "swe"
-}
-
 
 ###var Used by SSH, module###end
 
