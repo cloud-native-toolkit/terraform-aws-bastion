@@ -61,7 +61,7 @@ variable "ssh_key" {
 
 variable "publicIP" {
   type        = bool
-  default     = false
+  default     = true
   description = "Whether to attach a public IP to EC2 instance"
 }
 
@@ -84,10 +84,8 @@ variable "root_volume_size" {
 }
 
 variable "tags" {
-  type = map(string)
-  default = {
-    project = "swe"
-  }
+  type        = map(string)
+  default     = { project = "swe" }
   description = "(Optional) A map of tags to assign to the resource. If configured with a provider default_tags configuration block present, tags with matching keys will overwrite those defined at the provider-level."
 }
 
@@ -139,8 +137,8 @@ variable "security_group_rules" {
 ###module based variables##end
 
 variable "vpc_id" {
-  type    = string
-#  default = ""
+  type = string
+  #  default = ""
 }
 
 variable "vpc_subnet_count" {
