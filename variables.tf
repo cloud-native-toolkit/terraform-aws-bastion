@@ -83,11 +83,6 @@ variable "root_volume_size" {
   default     = 10
 }
 
-variable "tags" {
-  type        = map(string)
-  default     = { project = "swe" }
-  description = "(Optional) A map of tags to assign to the resource. If configured with a provider default_tags configuration block present, tags with matching keys will overwrite those defined at the provider-level."
-}
 
 variable "name_prefix" {
   type        = string
@@ -102,7 +97,7 @@ variable "pri_instance_monitoring" {
 }
 
 variable "label" {
-  default = "prd"
+  default = "bastion"
   type    = string
 }
 

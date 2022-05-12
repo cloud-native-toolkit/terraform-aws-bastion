@@ -64,4 +64,5 @@ module "bastion1" {
   ssh_key                 = var.ssh_key
   publicIP                = var.publicIP
   vpc_id                  = var.vpc_id
+  label                   = var.label
 }
