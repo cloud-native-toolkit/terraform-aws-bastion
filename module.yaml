@@ -10,10 +10,6 @@ versions:
     - name: aws
       source: "hashicorp/aws"
   dependencies:
-    - id: ec2-instance
-      refs:
-        - source: github.com/cloud-native-toolkit/terraform-aws-ec2
-          version: ">= 1.0.0"
     - id: aws-ssh-key
       refs:
         - source: github.com/cloud-native-toolkit/terraform-aws-ssh-key
@@ -44,3 +40,9 @@ versions:
         id: aws-ssh-key
         output: swesshkeyname
       optional: true
+    - name: instance_type 
+      scope: module
+      important: true         
+    - name: ami_id 
+      scope: module
+      important: true
