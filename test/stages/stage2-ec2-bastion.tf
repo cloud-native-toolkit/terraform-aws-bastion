@@ -16,5 +16,6 @@ module "bastion" {
   publicIP                    = var.publicIP
   ssh_key                     = module.vpcssh.swesshkeyname
   pri_instance_monitoring     = var.pri_instance_monitoring
+  name_prefix = var.name_prefix
 }
 

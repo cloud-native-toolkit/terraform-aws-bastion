@@ -65,4 +65,5 @@ module "bastion1" {
   publicIP                = var.publicIP
   vpc_id                  = var.vpc_id
   label                   = var.label
+  name_prefix = var.name_prefix
 }
